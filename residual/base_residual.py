@@ -24,9 +24,13 @@ class BaseResidual(ABC):
         pass
 
     def forward(self, p, *args):
+        p = np.array(p)
+        if p.ndim == 1:
+            p = np.expand_dims(p, 0).T
         return self.residual_function(p, *args)
 
     def __call__(self, p, *args):
+
         return self.forward(p, *args)
 
 
