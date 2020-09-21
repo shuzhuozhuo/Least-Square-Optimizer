@@ -4,7 +4,7 @@ from optimizer.gaussain_newton import GaussianNewton
 
 weights = [1, 5, 2, 9, 2, 1]
 points_num = 50
-init_params = [40, 0,0, 0, 0, 0]
+init_params = [40, 0, 0, 0, 0, 0]
 linear = LinearRegression(weights=weights, points_num=points_num, num_range=[0, 10], noise_range=1.0)
 x, y = linear.build_data(is_debug=True)
 

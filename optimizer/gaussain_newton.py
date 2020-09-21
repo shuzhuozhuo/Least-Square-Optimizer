@@ -28,8 +28,10 @@ class GaussianNewton(BaseOptimizer):
 
         res, pre_y, gt_y = self.residual(self.params, *self.res_args)
         jacobi_matrix_mxn = self.residual.jacobi(self.params, *self.res_args)
+
         if jacobi_matrix_mxn is None or self.use_num_diff:
             jacobi_matrix_mxn = self.diff_estimator(self.params)
+        print("jacobi_matrix_mxn", jacobi_matrix_mxn)
         jt_j_inv = np.linalg.inv(np.matmul(jacobi_matrix_mxn.T, jacobi_matrix_mxn))
         delta_p = np.matmul(np.matmul(jt_j_inv, jacobi_matrix_mxn.T), res)
         # self.gt = self.momentum * self.gt + (1 - self.momentum) * delta_p
@@ -44,6 +46,7 @@ class GaussianNewton(BaseOptimizer):
         residual, _, _ = self.residual(self.params, *self.res_args)
         print("Current grad is: ", np.linalg.norm(delta_p), "Stop at %d Iteration" % i)
         print("loss: ", np.mean(np.abs(residual)))
+        print("Params: ", self.params.T)
 
     def solve(self):
 
@@ -51,6 +54,7 @@ class GaussianNewton(BaseOptimizer):
             delta_p = self.calc_delta_p()
             self.update_lr(i)
             self.params -= self.lr * delta_p
+            self.show_stats(delta_p, i)
             if np.linalg.norm(delta_p) < self.delta_grad:
                 self.show_stats(delta_p, i)
                 return self.params
